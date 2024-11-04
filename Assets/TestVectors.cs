@@ -5,23 +5,25 @@ using UnityEngine;
 public class TestVectors : MonoBehaviour
 {
     public Transform CubeLG;
-    float distance;
+    public float rangeChangeColor = 3.0f;
 
     void Start()
     {
         transform.position = Vector3.forward;
     }
-    void Update()
-    {
-        Vector3 directionfacing = (transform.position - CubeLG.transform.position);
-        CubeLG.transform.position = directionfacing;
-
-        distance = Vector3.Distance(transform.position, CubeLG.transform.position);
-    }
 
     void OnDrawGizmos()
     {
-        if (distance < 3)
+        Vector3 directionfacing = (transform.position - CubeLG.transform.position).normalized;
+        CubeLG.transform.forward = directionfacing;
+        directionfacing.Normalize();
+
+        Gizmos.DrawLine(directionfacing, transform.position);
+        Vector3 scaled = directionfacing * 2;
+
+        float distance = directionfacing.magnitude;
+   
+        if (distance < rangeChangeColor)
         {
             Gizmos.color = Color.red;
         }
@@ -29,7 +31,5 @@ public class TestVectors : MonoBehaviour
         {
             Gizmos.color = Color.white;
         }
-
-        Gizmos.DrawLine(transform.position, CubeLG.transform.position);
     }
 }
